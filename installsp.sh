@@ -9,10 +9,10 @@
 # 5. ADD HELP FOR THE COMMAND
 # 6. ADD VIM AND WIM?
 
-if [[ $# -eq 0]] ; then
-    echo "USAGE ./installsp.sh sp.sonata.local 192.168.1.20"
-    exit 1
-fi
+#if [[ $# -eq 0]] ; then
+#    echo "USAGE ./installsp.sh sp.sonata.local 192.168.1.20"
+#    exit 1
+#fi
 
 echo "Cleaning the environment"
 echo "Deleting the stopped containers"
