@@ -92,7 +92,10 @@ docker run -d --name son-gui --net=sonata --network-alias=son-gui -P -e "MON_URL
 
 #BSS
 echo "DEPLOYING BSS"
-docker run -d -t -i --name son-bss --net=sonata --network-alias=son-bss -h $HOSTNAME -p 25001:1337 -p 25002:1338 -v /etc/ssl/private/sonata/:/usr/local/yeoman/SonataBSS/app/certs/ sonatanfv/son-yo-gen-bss:dev sudo grunt serve:integration --gkApiUrl=https://$HOSTNAME/api/v2 --hostname=$HOSTNAME --userManagementEnabled=false --licenseManagementEnabled=false --protocol=https --debug
+#With Certificate
+#docker run -d -t -i --name son-bss --net=sonata --network-alias=son-bss -h $HOSTNAME -p 25001:1337 -p 25002:1338 -v /etc/ssl/private/sonata/:/usr/local/yeoman/SonataBSS/app/certs/ sonatanfv/son-yo-gen-bss:dev sudo grunt serve:integration --gkApiUrl=https://$HOSTNAME/api/v2 --hostname=$HOSTNAME --userManagementEnabled=false --licenseManagementEnabled=false --protocol=https --debug
+#Without certificate
+docker run -d -t -i --name son-bss --net=sonata --network-alias=son-bss -h $HOSTNAME -p 25001:1337 -p 25002:1338 -v /etc/ssl/private/sonata/:/usr/local/yeoman/SonataBSS/app/certs/ sonatanfv/son-yo-gen-bss:dev sudo grunt serve:integration --gkApiUrl=https://$HOSTNAME/api/v2 --hostname=$HOSTNAME --userManagementEnabled=false --licenseManagementEnabled=false--debug
 
 #Gatekeeper
 echo "DEPLOYING GK-PKG"
