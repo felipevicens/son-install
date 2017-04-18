@@ -124,7 +124,7 @@ docker run --name son-gtkkpi --net=sonata --network-alias=son-gtkkpi -d -p 5400:
 echo "DEPLOYING GK-USR"
 docker run --name son-gtkusr --net=sonata --network-alias=son-gtkusr -d -p 5600:5600 -e KEYCLOAK_ADDRESS=son-keycloak -e KEYCLOAK_PORT=5601 -e KEYCLOAK_PATH=auth -e SONATA_REALM=sonata -e CLIENT_NAME=adapter sonatanfv/son-gtkusr:dev
 echo "DEPLOYING GK-API"
-docker run --name son-gtkapi --net=sonata --network-alias=son-gtkapi -d -p 32001:5000 -e RACK_ENV=integration -e PACKAGE_MANAGEMENT_URL=http://$HOSTIP:5100 -e SERVICE_MANAGEMENT_URL=http://$HOSTIP:5300 -e FUNCTION_MANAGEMENT_URL=http://$HOSTIP:5500 -e VIM_MANAGEMENT_URL=http://$HOSTIP:5700 -e RECORD_MANAGEMENT_URL=http://$HOSTIP:5800 -e KPI_MANAGEMENT_URL=http://$HOSTIP:5400 -e USER_MANAGEMENT_URL=http://son-gtkusr:5600 sonatanfv/son-gtkapi:dev
+docker run --name son-gtkapi --net=sonata --network-alias=son-gtkapi -d -p 32001:5000 -e RACK_ENV=integration -e USER_MANAGEMENT_URL=http://$HOSTIP:5600 -e LICENCE_MANAGEMENT_URL=http://$HOSTIP:5900 -e METRICS_URL=http://$HOSTIP:8000/api/v1 -e CATALOGUES_URL=http://$HOSTIP:4002/catalogues/api/v2 -e PACKAGE_MANAGEMENT_URL=http://$HOSTIP:5100 -e SERVICE_MANAGEMENT_URL=http://$HOSTIP:5300 -e FUNCTION_MANAGEMENT_URL=http://$HOSTIP:5500 -e VIM_MANAGEMENT_URL=http://$HOSTIP:5700 -e RECORD_MANAGEMENT_URL=http://$HOSTIP:5800 -e KPI_MANAGEMENT_URL=http://$HOSTIP:5400 -e USER_MANAGEMENT_URL=http://son-gtkusr:5600 sonatanfv/son-gtkapi:dev
 echo "DEPLOYING SECURITY GATEWAY"
 docker run --name son-sec-gw --net=sonata --network-alias=son-sec-gw -d -p 80:80 -p 443:443 -v /etc/ssl/private/sonata/:/etc/nginx/cert/ sonatanfv/son-sec-gw:dev
 
