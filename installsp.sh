@@ -58,13 +58,13 @@ HOSTIP=$2
 #Postgres
 echo "DEPLOYING POSTGRES"
 docker run -d -p 5432:5432 --name son-postgres --net=sonata --network-alias=son-postgres -e POSTGRES_DB=gatekeeper -e POSTGRES_USER=sonatatest -e POSTGRES_PASSWORD=sonata ntboes/postgres-uuid
-while ! nc -z localhost 5432; do
+while ! nc -z $HOSTIP 5432; do
   sleep 1 && echo -n .; # waiting for postgres
 done;
 #Mongo
 echo "DEPLOYING MONGO"
 docker run -d -p 27017:27017 --name son-mongo --net=sonata --network-alias=son-mongo mongo
-while ! nc -z localhost 27017; do
+while ! nc -z $HOSTIP 27017; do
   sleep 1 && echo -n .; # waiting for mongo
 done;
 # Deploying Postgres for Monitoring
