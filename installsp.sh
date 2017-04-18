@@ -78,7 +78,7 @@ docker run -d --name son-monitor-influxdb --net=sonata --network-alias=son-monit
 #Rabbitmq
 echo "DEPLOYING BROKER"
 docker run -d -p 5672:5672 -p 8080:15672 --name son-broker --net=sonata --network-alias=son-broker -e RABBITMQ_CONSOLE_LOG=new rabbitmq:3-management
-while ! nc -z localhost 5672; do
+while ! nc -z $HOSTIP 5672; do
   sleep 1 && echo -n .; # waiting for rabbitmq
 done;
 
