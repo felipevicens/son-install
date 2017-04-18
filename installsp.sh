@@ -9,8 +9,7 @@
 # 5. ADD HELP FOR THE COMMAND
 # 6. ADD VIM AND WIM?
 
-if [ $# -eq 0]
-  then
+if [[ $# -eq 0]] ; then
     echo "USAGE ./installsp.sh sp.sonata.local 192.168.1.20"
     exit 1
 fi
@@ -21,36 +20,36 @@ docker rm -fv $(docker ps -qa)
 sleep 10
 
 #Creating sonata network
+echo "Creating SONATA Network"
 if ! [[ "$(docker network inspect -f {{.Name}} sonata 2> /dev/null)" == "" ]]; then docker network rm sonata ; fi
 docker network create sonata
 
 #PULL THE CONTAINERS
-docker pull registry.sonata-nfv.eu:5000/son-gui
-docker pull registry.sonata-nfv.eu:5000/son-yo-gen-bss
-docker pull registry.sonata-nfv.eu:5000/son-gtkpkg
-docker pull registry.sonata-nfv.eu:5000/son-gtkusr
-docker pull registry.sonata-nfv.eu:5000/son-gtksrv
-docker pull registry.sonata-nfv.eu:5000/son-gtkapi
-docker pull registry.sonata-nfv.eu:5000/son-gtkfnct
-docker pull registry.sonata-nfv.eu:5000/son-gtkrec
-docker pull registry.sonata-nfv.eu:5000/son-gtkvim
-docker pull registry.sonata-nfv.eu:5000/son-gtklic
-docker pull registry.sonata-nfv.eu:5000/son-gtkkpi
-docker pull registry.sonata-nfv.eu:5000/son-sec-gw
-docker pull registry.sonata-nfv.eu:5000/son-keycloak
-docker pull registry.sonata-nfv.eu:5000/son-catalogue-repos
-docker pull registry.sonata-nfv.eu:5000/pluginmanager
-docker pull registry.sonata-nfv.eu:5000/specificmanagerregistry
-docker pull registry.sonata-nfv.eu:5000/servicelifecyclemanagement
-docker pull registry.sonata-nfv.eu:5000/son-sp-infrabstract
-docker pull registry.sonata-nfv.eu:5000/wim-adaptor
-docker pull registry.sonata-nfv.eu:5000/son-monitor-influxdb
-docker pull registry.sonata-nfv.eu:5000/son-monitor-pushgateway
-docker pull registry.sonata-nfv.eu:5000/son-monitor-prometheus
-docker pull registry.sonata-nfv.eu:5000/son-monitor-manager
-docker pull registry.sonata-nfv.eu:5000/son-monitor-probe
-docker pull registry.sonata-nfv.eu:5000/son-monitor-vmprobe
-
+docker pull sonatanfv/son-gui:dev
+docker pull sonatanfv/son-yo-gen-bss:dev
+docker pull sonatanfv/son-gtkpkg:dev
+docker pull sonatanfv/son-gtkusr:dev
+docker pull sonatanfv/son-gtksrv:dev
+docker pull sonatanfv/son-gtkapi:dev
+docker pull sonatanfv/son-gtkfnct:dev
+docker pull sonatanfv/son-gtkrec:dev
+docker pull sonatanfv/son-gtkvim:dev
+docker pull sonatanfv/son-gtklic:dev
+docker pull sonatanfv/son-gtkkpi:dev
+docker pull sonatanfv/son-sec-gw:dev
+docker pull sonatanfv/son-keycloak:dev
+docker pull sonatanfv/son-catalogue-repos:dev
+docker pull sonatanfv/pluginmanager:dev
+docker pull sonatanfv/specificmanagerregistry:dev
+docker pull sonatanfv/servicelifecyclemanagement:dev
+docker pull sonatanfv/son-sp-infrabstract:dev
+docker pull sonatanfv/wim-adaptor:dev
+docker pull sonatanfv/son-monitor-influxdb:dev
+docker pull sonatanfv/son-monitor-pushgateway:dev
+docker pull sonatanfv/son-monitor-prometheus:dev
+docker pull sonatanfv/son-monitor-manager:dev
+docker pull sonatanfv/son-monitor-probe:dev
+docker pull sonatanfv/son-monitor-vmprobe:dev
 
 HOSTNAME=$1
 HOSTIP=$2
@@ -143,7 +142,7 @@ echo "DEPLOYING SLM"
 docker run -d --name servicelifecyclemanagement --net=sonata --network-alias=servicelifecyclemanagement -e url_nsr_repository=http://$HOSTNAME:4002/records/nsr/ -e url_vnfr_repository=http://$HOSTNAME:4002/records/vnfr/ -e url_monitoring_server=http://$HOSTNAME:8000/api/v1/ -e broker_host=amqp://guest:guest@$HOSTNAME:5672/%2F sonatanfv/servicelifecyclemanagement:dev /bin/bash /delayedstart.sh 10 son-mano-service-lifecycle-management
 #docker run -d --name functionlifecyclemanagement -e broker_host=amqp://guest:guest@sp.int3-sonata-nfv.eu:5672/%2F sonatanfv/functionlifecyclemanagement /bin/bash /delayedstart.sh 10 son-mano-function-lifecycle-management
 echo "DEPLOYING PLACEMENTEXECUTIVE PLUGIN"
-docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@$HOSTNAME:5672/%2F --log-driver=gelf --log-opt gelf-address=udp://10.30.0.219:12900 registry.sonata-nfv.eu:5000/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
+docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@$HOSTNAME:5672/%2F --log-driver=gelf --log-opt gelf-address=udp://10.30.0.219:12900 sonatanfv/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
 
 #son-sp-infrabstract
 echo "DEPLOYING INFRASTRUCTURE ABSTRACTION"
