@@ -142,7 +142,7 @@ echo "DEPLOYING SLM"
 docker run -d --name servicelifecyclemanagement --net=sonata --network-alias=servicelifecyclemanagement -e url_nsr_repository=http://$HOSTIP:4002/records/nsr/ -e url_vnfr_repository=http://$HOSTIP:4002/records/vnfr/ -e url_monitoring_server=http://$HOSTIP:8000/api/v1/ -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F sonatanfv/servicelifecyclemanagement:dev /bin/bash /delayedstart.sh 10 son-mano-service-lifecycle-management
 #docker run -d --name functionlifecyclemanagement -e broker_host=amqp://guest:guest@sp.int3-sonata-nfv.eu:5672/%2F sonatanfv/functionlifecyclemanagement /bin/bash /delayedstart.sh 10 son-mano-function-lifecycle-management
 echo "DEPLOYING PLACEMENTEXECUTIVE PLUGIN"
-docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F --log-driver=gelf --log-opt gelf-address=udp://10.30.0.219:12900 registry.sonata-nfv.eu:5000/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
+docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F --log-driver=gelf --log-opt gelf-address=udp://10.30.0.219:12900 sonatanfv/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
 
 #son-sp-infrabstract
 echo "DEPLOYING INFRASTRUCTURE ABSTRACTION"
