@@ -137,19 +137,19 @@ sleep 15
 #son-mano-framework
 echo "DEPLOYING MANO-FRAMEWORK"
 echo "DEPLOYING PLUGINMANAGER"
-docker run -d --name pluginmanager --net=sonata --network-alias=pluginmanager -p 8001:8001 -e mongo_host=$HOSTIP -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F sonatanfv/pluginmanager:dev /bin/bash /delayedstart.sh 10 son-mano-pluginmanager
+docker run -d --name pluginmanager --net=sonata --network-alias=pluginmanager -p 8001:8001 -e mongo_host=$HOSTIP -e broker_host=amqp://guest:guest@son-broker:5672/%2F sonatanfv/pluginmanager:dev /bin/bash /delayedstart.sh 10 son-mano-pluginmanager
 sleep 10
 echo "DEPLOYING SMR"
-docker run -d --name specificmanagerregistry --net=sonata --network-alias=specificmanagerregistry -e broker_name=son-broker,broker -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F -v '/var/run/docker.sock:/var/run/docker.sock' sonatanfv/specificmanagerregistry:dev
+docker run -d --name specificmanagerregistry --net=sonata --network-alias=specificmanagerregistry -e broker_name=son-broker,broker -e broker_host=amqp://guest:guest@son-broker:5672/%2F -v '/var/run/docker.sock:/var/run/docker.sock' sonatanfv/specificmanagerregistry:dev
 echo "DEPLOYING SLM"
-docker run -d --name servicelifecyclemanagement --net=sonata --network-alias=servicelifecyclemanagement -e url_nsr_repository=http://$HOSTIP:4002/records/nsr/ -e url_vnfr_repository=http://$HOSTIP:4002/records/vnfr/ -e url_monitoring_server=http://$HOSTIP:8000/api/v1/ -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F sonatanfv/servicelifecyclemanagement:dev /bin/bash /delayedstart.sh 10 son-mano-service-lifecycle-management
+docker run -d --name servicelifecyclemanagement --net=sonata --network-alias=servicelifecyclemanagement -e url_nsr_repository=http://$HOSTIP:4002/records/nsr/ -e url_vnfr_repository=http://$HOSTIP:4002/records/vnfr/ -e url_monitoring_server=http://$HOSTIP:8000/api/v1/ -e broker_host=amqp://guest:guest@son-broker:5672/%2F sonatanfv/servicelifecyclemanagement:dev /bin/bash /delayedstart.sh 10 son-mano-service-lifecycle-management
 #docker run -d --name functionlifecyclemanagement -e broker_host=amqp://guest:guest@sp.int3-sonata-nfv.eu:5672/%2F sonatanfv/functionlifecyclemanagement /bin/bash /delayedstart.sh 10 son-mano-function-lifecycle-management
 echo "DEPLOYING PLACEMENTEXECUTIVE PLUGIN"
-docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@$HOSTIP:5672/%2F sonatanfv/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
+docker run -d --name placementexecutive --net=sonata --network-alias=placementexecutive -e broker_host=amqp://guest:guest@son-broker:5672/%2F sonatanfv/placementexecutive:dev /bin/bash /delayedstart.sh 10 son-mano-placement
 
 #son-sp-infrabstract
 echo "DEPLOYING INFRASTRUCTURE ABSTRACTION"
-docker run -d --name son-sp-infrabstract --net=sonata --network-alias=son-sp-infrabstract -e broker_host=$HOSTIP -e broker_uri=amqp://guest:guest@$HOSTIP:5672/%2F -e repo_host=$HOSTIP -e repo_port=5432 -e repo_user=sonatatest -e repo_pass=sonata  sonatanfv/son-sp-infrabstract:dev /docker-entrypoint.sh
+docker run -d --name son-sp-infrabstract --net=sonata --network-alias=son-sp-infrabstract -e broker_host=son-broker -e broker_uri=amqp://guest:guest@son-broker:5672/%2F -e repo_host=$HOSTIP -e repo_port=5432 -e repo_user=sonatatest -e repo_pass=sonata  sonatanfv/son-sp-infrabstract:dev /docker-entrypoint.sh
 #docker run -d --name son-sp-infrabstract -e broker_host=$HOSTIP -e broker_uri=amqp://guest:guest@$HOSTIP:5672/%2F sonatanfv/son-sp-infrabstract 
 
 while ! docker exec -t son-postgres psql -h localhost -U postgres -d vimregistry -c "SELECT * FROM VIM"; do
@@ -185,7 +185,7 @@ done;
 
 #wim-adaptor
 echo "DEPLOYING WIM ADAPTOR"
-docker run -d --name wim-adaptor --net=sonata --network-alias=vim-adaptor -e broker_host=$HOSTIP -e broker_uri=amqp://guest:guest@$HOSTIP:5672/%2F -e repo_host=$HOSTIP -e repo_port=5432 -e repo_user=sonatatest -e repo_pass=sonata  sonatanfv/wim-adaptor:dev /docker-entrypoint.sh
+docker run -d --name wim-adaptor --net=sonata --network-alias=vim-adaptor -e broker_host=son-broker -e broker_uri=amqp://guest:guest@son-broker:5672/%2F -e repo_host=$HOSTIP -e repo_port=5432 -e repo_user=sonatatest -e repo_pass=sonata  sonatanfv/wim-adaptor:dev /docker-entrypoint.sh
 
 while ! docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "SELECT * FROM WIM"; do
   sleep 2 && echo -n .; # waiting for table creation
