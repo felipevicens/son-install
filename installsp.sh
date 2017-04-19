@@ -125,8 +125,6 @@ echo "DEPLOYING GK-USR"
 docker run --name son-gtkusr --net=sonata --network-alias=son-gtkusr -d -p 5600:5600 -e KEYCLOAK_ADDRESS=son-keycloak -e KEYCLOAK_PORT=5601 -e KEYCLOAK_PATH=auth -e SONATA_REALM=sonata -e CLIENT_NAME=adapter sonatanfv/son-gtkusr:dev
 echo "DEPLOYING GK-API"
 docker run --name son-gtkapi --net=sonata --network-alias=son-gtkapi -d -p 32001:5000 -e RACK_ENV=integration -e USER_MANAGEMENT_URL=http://$HOSTIP:5600 -e LICENCE_MANAGEMENT_URL=http://$HOSTIP:5900 -e METRICS_URL=http://$HOSTIP:8000/api/v1 -e CATALOGUES_URL=http://$HOSTIP:4002/catalogues/api/v2 -e PACKAGE_MANAGEMENT_URL=http://$HOSTIP:5100 -e SERVICE_MANAGEMENT_URL=http://$HOSTIP:5300 -e FUNCTION_MANAGEMENT_URL=http://$HOSTIP:5500 -e VIM_MANAGEMENT_URL=http://$HOSTIP:5700 -e RECORD_MANAGEMENT_URL=http://$HOSTIP:5800 -e KPI_MANAGEMENT_URL=http://$HOSTIP:5400 -e USER_MANAGEMENT_URL=http://son-gtkusr:5600 sonatanfv/son-gtkapi:dev
-echo "DEPLOYING SECURITY GATEWAY"
-docker run --name son-sec-gw --net=sonata --network-alias=son-sec-gw -d -p 80:80 -p 443:443 -v /etc/ssl/private/sonata/:/etc/nginx/cert/ sonatanfv/son-sec-gw:dev
 
 #Catalogues
 echo "DEPLOYING CATALOGUES"
@@ -213,3 +211,5 @@ docker run -d --name son-monitor-manager --net=sonata --network-alias=son-monito
 docker run -d --name son-mon-vmprobe -e NODE_NAME=TEST-VNF -e PROM_SRV=http://$HOSTIP:9091/metrics --net="host" --privileged=true  -v /proc:/myhost/proc -v /:/rootfs:ro sonatanfv/son-monitor-vmprobe:dev
 docker run -d --name son-monitor-probe -e NODE_NAME=DEMO -e PROM_SRV=http://$HOSTIP:9091/metrics --net="host" --privileged=true -d -v /var/run/docker.sock:/var/run/docker.sock -v /proc:/myhost/proc -v /:/rootfs:ro sonatanfv/son-monitor-probe:dev
 
+echo "DEPLOYING SECURITY GATEWAY"
+docker run --name son-sec-gw --net=sonata --network-alias=son-sec-gw -d -p 80:80 -p 443:443 -v /etc/ssl/private/sonata/:/etc/nginx/cert/ sonatanfv/son-sec-gw:dev
