@@ -88,7 +88,11 @@ docker run --name son-keycloak -d -p 5601:5601 --net=sonata --network-alias=son-
 
 #GUI
 echo "DEPLOYING SON-GUI"
-docker run -d --name son-gui --net=sonata --network-alias=son-gui -P -e "MON_URL=$HOSTNAME:8000" -e "GK_URL=$HOSTNAME:32001/api/v2" -e "LOGS_URL=$HOSTNAME:12900" sonatanfv/son-gui:dev
+#HTTP
+docker run -d --name son-gui --net=sonata --network-alias=son-gui -P -e "MON_URL=http://$HOSTNAME/monitoring" -e "GK_URL=http://$HOSTNAME/api/v2" -e "LOGS_URL=$HOSTNAME:12900" sonatanfv/son-gui:dev
+#HTTPS
+#docker run -d --name son-gui --net=sonata --network-alias=son-gui -P -e "MON_URL=https://$HOSTNAME/monitoring" -e "GK_URL=https://$HOSTNAME/api/v2" -e "LOGS_URL=$HOSTNAME:12900" sonatanfv/son-gui:dev
+
 
 #BSS
 echo "DEPLOYING BSS"
