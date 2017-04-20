@@ -193,14 +193,14 @@ while ! docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry
   sleep 2 && echo -n .; # waiting for table creation
 done;
 
-while ! docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "SELECT * FROM SERVICED_SEGMENTS"; do
+while ! docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "SELECT * FROM ATTACHED_VIM"; do
   sleep 2 && echo -n .; # waiting for table creation
 done;
 
 #ADD THE WIM
 #docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "INSERT INTO WIM (UUID, TYPE, VENDOR, ENDPOINT, USERNAME, PASS, AUTHKEY) VALUES ('1234-12345678-12345678-1234', 'WIM', 'VTN', '10.30.0.13', 'admin', 'admin', null);"
 #THIS WIM will serve PoP#1
-#docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "INSERT INTO SERVICED_SEGMENTS (NETWORK_SEGMENT, WIM_UUID) VALUES ('1111-22222222-33333333-4444', '1234-12345678-12345678-1234');"
+#docker exec -t son-postgres psql -h localhost -U postgres -d wimregistry -c "INSERT INTO ATTACHED_VIM (VIM_UUID, WIM_UUID) VALUES ('1111-22222222-33333333-4444', '1234-12345678-12345678-1234');"
 
 #son-monitor
 echo "DEPLOYING MONITORING"
